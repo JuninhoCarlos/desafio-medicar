@@ -16,8 +16,6 @@ class Medico(models.Model):
     email = models.EmailField(blank=True)
     telefone = models.CharField(max_length=15, blank=True)
     especialidade = models.ForeignKey(Especialidade,
-                                      blank=True,
-                                      null=True,
                                       on_delete=models.CASCADE)
 
     def __str__(self):
