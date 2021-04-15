@@ -16,6 +16,8 @@ Including another URLconf
 from django.contrib import admin
 from django.urls import path, include
 from rest_framework import routers
+from rest_framework.authtoken import views
+
 from api.views import EspecialidadeViewSet, MedicoViewSet
 
 router = routers.DefaultRouter()
@@ -25,6 +27,7 @@ router.register(r'api/v1/medicos', MedicoViewSet, basename="Medico")
 
 urlpatterns = [
     path('admin/', admin.site.urls),
+    path('api/v1/auth/login', views.obtain_auth_token)
 ]
 
 urlpatterns += router.urls
