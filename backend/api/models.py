@@ -1,5 +1,6 @@
 from django.db import models
 from django.core.exceptions import ValidationError
+from django.contrib.postgres.fields import ArrayField
 from datetime import date
 
 
@@ -22,19 +23,12 @@ class Medico(models.Model):
         return self.nome
 
 
-class Horario(models.Model):
-    horario = models.TimeField(unique=True)
-
-    def __str__(self):
-        return str(self.horario.strftime("%H:%M:%S"))
-
-
 class Agenda(models.Model):
     medico = models.ForeignKey(Medico,
                                unique_for_date="dia",
                                on_delete=models.CASCADE)
     dia = models.DateField()
-    horarios = models.ManyToManyField(Horario)
+    horarios = ArrayField(models.TimeField())
 
     def __str__(self):
         return self.medico.nome + " - " + str(self.dia.strftime("%d/%m/%Y"))
@@ -43,3 +37,5 @@ class Agenda(models.Model):
         if self.dia < date.today():
             raise ValidationError('The agenda should be contain a valid'
                                   ' date (from today onwards)')
+
+
