@@ -1,8 +1,8 @@
 from django.db.models import Q
 from rest_framework import mixins, viewsets, filters
 from rest_framework.permissions import IsAuthenticated
-from .serializers import EspecialidadeSerializer, MedicoSerializer
-from .models import Especialidade, Medico
+from .serializers import EspecialidadeSerializer, MedicoSerializer, AgendaSerializer
+from .models import Especialidade, Medico, Agenda
 
 
 class EspecialidadeViewSet(mixins.ListModelMixin, viewsets.GenericViewSet):
@@ -32,3 +32,8 @@ class MedicoViewSet(mixins.ListModelMixin, viewsets.GenericViewSet):
 
         return queryset
 
+
+class AgendaViewSet(mixins.ListModelMixin, viewsets.GenericViewSet):
+    serializer_class = AgendaSerializer
+    permission_classes = [IsAuthenticated]
+    queryset = Agenda.objects.all()

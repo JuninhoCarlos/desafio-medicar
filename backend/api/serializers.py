@@ -1,5 +1,5 @@
 from rest_framework import serializers
-from .models import Especialidade, Medico
+from .models import Especialidade, Medico, Agenda
 
 
 class EspecialidadeSerializer(serializers.ModelSerializer):
@@ -15,3 +15,13 @@ class MedicoSerializer(serializers.ModelSerializer):
     class Meta:
         model = Medico
         fields = ['id', 'crm', 'nome', 'especialidade']
+
+
+class AgendaSerializer(serializers.ModelSerializer):
+    medico = MedicoSerializer()
+    horarios = serializers.ListField(child=serializers.TimeField(format='%H:%M'))
+
+    class Meta:
+        model = Agenda
+        fields = ['id', 'medico', 'dia', 'horarios']
+        

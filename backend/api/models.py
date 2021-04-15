@@ -1,7 +1,8 @@
+from datetime import date
 from django.db import models
 from django.core.exceptions import ValidationError
 from django.contrib.postgres.fields import ArrayField
-from datetime import date
+from django.contrib.auth.models import User
 
 
 class Especialidade(models.Model):
@@ -39,3 +40,9 @@ class Agenda(models.Model):
                                   ' date (from today onwards)')
 
 
+class Consulta(models.Model):
+    usuario = models.ForeignKey(User, on_delete=models.CASCADE)
+    medico = models.ForeignKey(Medico, on_delete=models.CASCADE)
+    dia = models.DateField()
+    data_agendamento = models.DateTimeField(auto_now_add=True)
+    horario = models.DateTimeField()
