@@ -24,7 +24,7 @@ router = routers.DefaultRouter()
 
 router.register(r'api/v1/especialidades', EspecialidadeViewSet)
 router.register(r'api/v1/medicos', MedicoViewSet, basename="Medico")
-router.register(r'api/v1/agendas', AgendaViewSet)
+router.register(r'api/v1/agendas', AgendaViewSet, basename="Agenda")
 
 urlpatterns = [
     path('admin/', admin.site.urls),

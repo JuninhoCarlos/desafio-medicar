@@ -39,6 +39,9 @@ class Agenda(models.Model):
             raise ValidationError('The agenda should be contain a valid'
                                   ' date (from today onwards)')
 
+    class Meta:
+        ordering = ['dia']
+
 
 class Consulta(models.Model):
     usuario = models.ForeignKey(User, on_delete=models.CASCADE)
