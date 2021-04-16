@@ -1,5 +1,5 @@
 from rest_framework import serializers
-from .models import Especialidade, Medico, Agenda
+from .models import Especialidade, Medico, Agenda, Consulta
 
 
 class EspecialidadeSerializer(serializers.ModelSerializer):
@@ -24,4 +24,13 @@ class AgendaSerializer(serializers.ModelSerializer):
     class Meta:
         model = Agenda
         fields = ['id', 'medico', 'dia', 'horarios']
-        
+
+
+class ConsultaCreateSerializer(serializers.Serializer):
+    agenda_id = serializers.IntegerField()
+    horario = serializers.TimeField()
+
+    def validate(self, data):
+        '# Valida a inserção de uma Consulta'
+        print("Validando o request", data)
+        return data

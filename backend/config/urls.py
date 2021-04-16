@@ -18,13 +18,19 @@ from django.urls import path, include
 from rest_framework import routers
 from rest_framework.authtoken import views
 
-from api.views import EspecialidadeViewSet, MedicoViewSet, AgendaViewSet
+from api.views import (
+    EspecialidadeViewSet,
+    MedicoViewSet,
+    AgendaViewSet,
+    ConsultaViewSet
+)
 
 router = routers.DefaultRouter()
 
 router.register(r'api/v1/especialidades', EspecialidadeViewSet)
 router.register(r'api/v1/medicos', MedicoViewSet, basename="Medico")
 router.register(r'api/v1/agendas', AgendaViewSet, basename="Agenda")
+router.register(r'api/v1/consultas', ConsultaViewSet, basename="Consulta")
 
 urlpatterns = [
     path('admin/', admin.site.urls),

@@ -1,19 +1,22 @@
 from datetime import datetime, date
 from django.db.models import Q
 from rest_framework import mixins, viewsets, filters
+from rest_framework.response import Response
 from rest_framework.permissions import IsAuthenticated
 from .serializers import (
     EspecialidadeSerializer,
     MedicoSerializer,
-    AgendaSerializer
+    AgendaSerializer,
+    ConsultaCreateSerializer
 )
-from .models import Especialidade, Medico, Agenda
-
-
-'#  Funcao para criar uma query com a condicao Or sobre a lista array'
+from .models import Especialidade, Medico, Agenda, Consulta
 
 
 def build_or_query(array, field):
+    """
+    Função para gerar uma query com uma condição OR no campo field com os
+    valores passado no array
+    """
     query = Q()
     for item in array:
         query |= Q(**{field: item})
@@ -52,21 +55,39 @@ class AgendaViewSet(mixins.ListModelMixin, viewsets.GenericViewSet):
     permission_classes = [IsAuthenticated]
 
     def get_queryset(self):
-        queryset = Agenda.objects.filter(dia__gte=date.today()) #remove agendas de datas passadas da listagem
+        '# Remove agendas de datas passadas da listagem'
+        queryset = Agenda.objects.filter(dia__gte=date.today())
 
-        '#Filtra os horarios invalidos do dia de hoje'
-        horarios_list = queryset.filter(dia=date.today()).values('id', 'horarios')
-        for horario_obj in horarios_list:
-            invalido = False
-            horarios_validos = []            
-            for hora in horario_obj['horarios']:
-                if hora < datetime.now().time():
-                    invalido = True
+        '# Filtra os horarios invalidos do dia de hoje'
+        novo_queryset = []
+        for agenda in queryset:
+            '# Verifico se a agenda é de hoje '
+            if(agenda.dia != date.today()):
+                novo_queryset.append(agenda)
+                continue
+            novos_horarios = []
+            for hora in agenda.horarios:
+                '# Verifica se o horario não passou'
+                if hora < datetime.now().time():                    
                     continue
-                horarios_validos.append(hora)
+                novos_horarios.append(hora)
+            agenda.horarios = novos_horarios
+            novo_queryset.append(agenda)
 
-            if invalido:
-                queryset.filter(pk=horario_obj['id']).update(horarios=horarios_validos)
+        queryset = novo_queryset
+        
+        #horarios_list = queryset.filter(dia=date.today()).values('id', 'horarios')
+        #for horario_obj in horarios_list:
+        #    invalido = False
+        #    horarios_validos = []            
+        #    for hora in horario_obj['horarios']:
+        #        if hora < datetime.now().time():
+        #            invalido = True
+        #            continue
+        #        horarios_validos.append(hora)
+
+        #    if invalido:
+        #        queryset.filter(pk=horario_obj['id']).update(horarios=horarios_validos)
 
         medico_filter_list = self.request.query_params.getlist('medico', None)
         especialidade_filter_list = self.request.query_params.getlist('especialidade', None)
@@ -83,3 +104,16 @@ class AgendaViewSet(mixins.ListModelMixin, viewsets.GenericViewSet):
             queryset = queryset.filter(dia__range=[data_inicio_filter, data_final_filter])
 
         return queryset
+
+
+class ConsultaViewSet(mixins.CreateModelMixin,                      
+                      viewsets.GenericViewSet):
+
+    permission_classes = [IsAuthenticated]
+    queryset = Consulta.objects.all()
+    serializer_class = ConsultaCreateSerializer
+
+    def create(self, request):
+        serializer = ConsultaCreateSerializer(data=request.data)
+        serializer.is_valid(raise_exception=True)
+        return Response(serializer.data)
