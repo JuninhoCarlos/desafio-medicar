@@ -1,3 +1,4 @@
+from datetime import datetime, date
 from django.db.models import Q
 from rest_framework import mixins, viewsets, filters
 from rest_framework.permissions import IsAuthenticated
@@ -51,7 +52,22 @@ class AgendaViewSet(mixins.ListModelMixin, viewsets.GenericViewSet):
     permission_classes = [IsAuthenticated]
 
     def get_queryset(self):
-        queryset = Agenda.objects.all()
+        queryset = Agenda.objects.filter(dia__gte=date.today()) #remove agendas de datas passadas da listagem
+
+        '#Filtra os horarios invalidos do dia de hoje'
+        horarios_list = queryset.filter(dia=date.today()).values('id', 'horarios')
+        for horario_obj in horarios_list:
+            invalido = False
+            horarios_validos = []            
+            for hora in horario_obj['horarios']:
+                if hora < datetime.now().time():
+                    invalido = True
+                    continue
+                horarios_validos.append(hora)
+
+            if invalido:
+                queryset.filter(pk=horario_obj['id']).update(horarios=horarios_validos)
+
         medico_filter_list = self.request.query_params.getlist('medico', None)
         especialidade_filter_list = self.request.query_params.getlist('especialidade', None)
         data_inicio_filter = self.request.query_params.get('data_inicio', None)
@@ -65,5 +81,5 @@ class AgendaViewSet(mixins.ListModelMixin, viewsets.GenericViewSet):
             queryset = queryset.filter(query_especialidade)
         if data_final_filter and data_final_filter:
             queryset = queryset.filter(dia__range=[data_inicio_filter, data_final_filter])
-            
+
         return queryset
