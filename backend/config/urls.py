@@ -30,11 +30,12 @@ router = routers.DefaultRouter()
 router.register(r'api/v1/especialidades', EspecialidadeViewSet)
 router.register(r'api/v1/medicos', MedicoViewSet, basename="Medico")
 router.register(r'api/v1/agendas', AgendaViewSet, basename="Agenda")
-router.register(r'api/v1/consultas', ConsultaViewSet, basename="Consulta")
+#router.register(r'api/v1/consultas', ConsultaViewSet, basename="Consulta")
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path('api/v1/auth/login', views.obtain_auth_token)
+    path('api/v1/auth/login', views.obtain_auth_token),
+    path('api/v1/consultas/', ConsultaViewSet.as_view())
 ]
 
 urlpatterns += router.urls
