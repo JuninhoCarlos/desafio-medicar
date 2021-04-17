@@ -3,25 +3,17 @@ from django.db.models import Q
 from rest_framework import mixins, viewsets, filters
 from rest_framework.response import Response
 from rest_framework.permissions import IsAuthenticated
+from drf_rw_serializers import generics
+
 from .serializers import (
     EspecialidadeSerializer,
     MedicoSerializer,
     AgendaSerializer,
-    ConsultaCreateSerializer
+    CriaConsultaSerializer,
+    ConsultaSerializer
 )
 from .models import Especialidade, Medico, Agenda, Consulta
-
-
-def build_or_query(array, field):
-    """
-    Função para gerar uma query com uma condição OR no campo field com os
-    valores passado no array
-    """
-    query = Q()
-    for item in array:
-        query |= Q(**{field: item})
-
-    return query
+from .helpers import build_or_query
 
 
 class EspecialidadeViewSet(mixins.ListModelMixin, viewsets.GenericViewSet):
@@ -55,19 +47,19 @@ class AgendaViewSet(mixins.ListModelMixin, viewsets.GenericViewSet):
     permission_classes = [IsAuthenticated]
 
     def get_queryset(self):
-        '# Remove agendas de datas passadas da listagem'
+        # Remove agendas de datas passadas da listagem
         queryset = Agenda.objects.filter(dia__gte=date.today())
 
-        '# Filtra os horarios invalidos do dia de hoje'
+        # Filtra os horarios invalidos do dia de hoje
         novo_queryset = []
         for agenda in queryset:
-            '# Verifico se a agenda é de hoje '
+            # Verifico se a agenda é de hoje 
             if(agenda.dia != date.today()):
                 novo_queryset.append(agenda)
                 continue
             novos_horarios = []
             for hora in agenda.horarios:
-                '# Verifica se o horario não passou'
+                # Verifica se o horario não passou
                 if hora < datetime.now().time():                    
                     continue
                 novos_horarios.append(hora)
@@ -75,45 +67,33 @@ class AgendaViewSet(mixins.ListModelMixin, viewsets.GenericViewSet):
             novo_queryset.append(agenda)
 
         queryset = novo_queryset
-        
-        #horarios_list = queryset.filter(dia=date.today()).values('id', 'horarios')
-        #for horario_obj in horarios_list:
-        #    invalido = False
-        #    horarios_validos = []            
-        #    for hora in horario_obj['horarios']:
-        #        if hora < datetime.now().time():
-        #            invalido = True
-        #            continue
-        #        horarios_validos.append(hora)
 
-        #    if invalido:
-        #        queryset.filter(pk=horario_obj['id']).update(horarios=horarios_validos)
+        lista_filtro_medico = self.request.query_params.getlist('medico', None)
+        lista_filtro_especialidade = self.request.query_params.getlist('especialidade', None)
+        filtro_data_inicio = self.request.query_params.get('data_inicio', None)
+        filtro_data_final = self.request.query_params.get('data_final', None)
 
-        medico_filter_list = self.request.query_params.getlist('medico', None)
-        especialidade_filter_list = self.request.query_params.getlist('especialidade', None)
-        data_inicio_filter = self.request.query_params.get('data_inicio', None)
-        data_final_filter = self.request.query_params.get('data_final', None)
-
-        if medico_filter_list:
-            query_medico = build_or_query(medico_filter_list, 'medico__id')
+        if lista_filtro_medico:
+            query_medico = build_or_query(lista_filtro_medico, 'medico__id')
             queryset = queryset.filter(query_medico)
-        if especialidade_filter_list:
-            query_especialidade = build_or_query(especialidade_filter_list, 'medico__especialidade')
+        if lista_filtro_especialidade:
+            query_especialidade = build_or_query(lista_filtro_especialidade, 'medico__especialidade')
             queryset = queryset.filter(query_especialidade)
-        if data_final_filter and data_final_filter:
-            queryset = queryset.filter(dia__range=[data_inicio_filter, data_final_filter])
+        if filtro_data_inicio and filtro_data_final:
+            queryset = queryset.filter(dia__range=[filtro_data_inicio, filtro_data_final])
 
         return queryset
 
 
-class ConsultaViewSet(mixins.CreateModelMixin,                      
-                      viewsets.GenericViewSet):
-
-    permission_classes = [IsAuthenticated]
+class ConsultaViewSet(generics.ListCreateAPIView):
     queryset = Consulta.objects.all()
-    serializer_class = ConsultaCreateSerializer
-
-    def create(self, request):
-        serializer = ConsultaCreateSerializer(data=request.data)
-        serializer.is_valid(raise_exception=True)
-        return Response(serializer.data)
+    write_serializer_class = CriaConsultaSerializer
+    read_serializer_class = ConsultaSerializer
+    permission_classes = [IsAuthenticated]
+    #def post(self,*args,**kwargs):
+    #    __import__('ipdb').set_trace()
+    #def create(self, request):        
+        #serializer = CriaConsultaSerializer(data=request.data, context={'usuario': request.user})        
+        #serializer.is_valid(raise_exception=True)
+        #serializer.save()
+       # return Response(serializer.data)
