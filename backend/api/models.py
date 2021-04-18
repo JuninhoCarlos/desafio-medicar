@@ -1,8 +1,4 @@
-from datetime import date
-
-from django.contrib.auth.models import User
-from django.contrib.postgres.fields import ArrayField
-from django.core.exceptions import ValidationError
+from django.contrib.auth import get_user_model
 from django.db import models
 
 from .validations import no_past
@@ -49,7 +45,7 @@ class Agenda(models.Model):
 
 
 class Consulta(models.Model):
-    usuario = models.ForeignKey(User, on_delete=models.CASCADE)
+    usuario = models.ForeignKey(get_user_model(), on_delete=models.CASCADE)
     medico = models.ForeignKey(Medico, on_delete=models.CASCADE)
     dia = models.DateField()
     data_agendamento = models.DateTimeField(auto_now_add=True)

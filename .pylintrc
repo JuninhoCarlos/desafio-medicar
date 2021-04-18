@@ -1,0 +1,13 @@
+[MASTER]
+
+disable=abstract-method,        
+        arguments-differ,        
+        missing-docstring,        
+        pointless-string-statement,
+load-plugins=pylint_django              
+        
+
+
+[FORMAT]
+# Maximum number of characters on a single line.
+max-line-length=100

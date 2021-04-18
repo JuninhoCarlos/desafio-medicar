@@ -76,8 +76,8 @@ class ConsultaWriteSerializer(serializers.Serializer):
             if len(Consulta.objects.filter(agenda=data["agenda_id"], horario=data["horario"])) != 0:
                 raise serializers.ValidationError("Horário já está ocupado!")
 
-        except Agenda.DoesNotExist:
-            raise serializers.ValidationError("O id da agenda não existe!")
+        except Agenda.DoesNotExist as agenda_nao_existe:
+            raise serializers.ValidationError("O id da agenda não existe!") from agenda_nao_existe
         return data
 
     def create(self, validated_data):
