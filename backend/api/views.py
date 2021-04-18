@@ -9,8 +9,8 @@ from .filters import AgendaFilter, MedicoFilter
 from .models import Agenda, Consulta, Especialidade, Medico
 from .serializers import (
     AgendaSerializer,
-    ConsultaSerializer,
-    CriaConsultaSerializer,
+    ConsultaReadSerializer,
+    ConsultaWriteSerializer,
     EspecialidadeSerializer,
     MedicoSerializer,
 )
@@ -41,8 +41,8 @@ class AgendaAPIView(ListAPIView):
 
 class ConsultaAPIView(generics.ListCreateAPIView):
     queryset = Consulta.objects.all()
-    write_serializer_class = CriaConsultaSerializer
-    read_serializer_class = ConsultaSerializer
+    write_serializer_class = ConsultaWriteSerializer
+    read_serializer_class = ConsultaReadSerializer
     permission_classes = [IsAuthenticated]
     # def post(self,*args,**kwargs):
     #    __import__('ipdb').set_trace()

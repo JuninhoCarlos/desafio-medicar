@@ -27,7 +27,7 @@ class Medico(models.Model):
 
 
 class Horario(models.Model):
-    horario = models.TimeField()
+    horario = models.TimeField(unique=True)
 
     def __str__(self):
         return self.horario.isoformat()
@@ -39,7 +39,7 @@ class Horario(models.Model):
 class Agenda(models.Model):
     medico = models.ForeignKey(Medico, unique_for_date="dia", on_delete=models.CASCADE)
     dia = models.DateField(validators=[no_past])
-    horarios = models.ManyToManyField("Horario")
+    horarios = models.ManyToManyField(Horario)
 
     def __str__(self):
         return f'{self.medico.nome} - {self.dia.strftime("%d/%m/%Y")}'
@@ -54,3 +54,4 @@ class Consulta(models.Model):
     dia = models.DateField()
     data_agendamento = models.DateTimeField(auto_now_add=True)
     horario = models.TimeField()
+    agenda = models.ForeignKey(Agenda, on_delete=models.CASCADE)

@@ -22,7 +22,7 @@ urlpatterns = [
     path("admin/", admin.site.urls),
     path("api/v1/auth/login", views.obtain_auth_token),
     path("api/v1/consultas/", ConsultaAPIView.as_view()),
-    path("api/v1/medicos", MedicoAPIView.as_view()),
-    path("api/v1/agendas", AgendaAPIView.as_view()),
-    path("api/v1/especialidades", EspecialidadeAPIView.as_view()),
+    path("api/v1/medicos/", MedicoAPIView.as_view()),
+    path("api/v1/agendas/", AgendaAPIView.as_view()),
+    path("api/v1/especialidades/", EspecialidadeAPIView.as_view()),
 ]

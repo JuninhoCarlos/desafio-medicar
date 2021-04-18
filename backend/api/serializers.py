@@ -36,7 +36,7 @@ class AgendaSerializer(serializers.ModelSerializer):
         fields = ["id", "medico", "dia", "horarios"]
 
 
-class CriaConsultaSerializer(serializers.Serializer):
+class ConsultaWriteSerializer(serializers.Serializer):
     agenda_id = serializers.IntegerField()
     horario = serializers.TimeField()
 
@@ -65,16 +65,16 @@ class CriaConsultaSerializer(serializers.Serializer):
                     "usuario já possui uma consulta marcada nesse horario e dia!"
                 )
 
-            "# Valida o horário da consulta"
+            # Verifica se o horário existe na agenda
             if (
-                len(
-                    Agenda.objects.filter(
-                        pk=data["agenda_id"], horarios__contains=[data["horario"]]
-                    )
-                )
+                len(Agenda.objects.filter(pk=data["agenda_id"], horarios__horario=data["horario"]))
                 == 0
             ):
-                raise serializers.ValidationError("Horario indisponível!")
+                raise serializers.ValidationError("Horario inexistente na agenda!")
+
+            # Verifica se o horário não já está ocupado
+            if len(Consulta.objects.filter(agenda=data["agenda_id"], horario=data["horario"])) != 0:
+                raise serializers.ValidationError("Horário já está ocupado!")
 
         except Agenda.DoesNotExist:
             raise serializers.ValidationError("O id da agenda não existe!")
@@ -86,29 +86,14 @@ class CriaConsultaSerializer(serializers.Serializer):
         medico = agenda.medico
         dia = agenda.dia
         usuario = self.context["request"].user
-        return Consulta.objects.create(dia=dia, horario=horario, usuario=usuario, medico=medico)
+        return Consulta.objects.create(
+            dia=dia, horario=horario, usuario=usuario, medico=medico, agenda=agenda
+        )
 
 
-"""
-{
-  "id": 2,
-  "dia": "2020-03-01",
-  "horario": "09:00",
-  "data_agendamento": "2020-02-01T10:45:0-03:00",
-  "medico": {
-    "id": 1,
-    "crm": 3711,
-    "nome": "Drauzio Varella",
-    "especialidade": {
-            "id":2,
-            "nome": "Pediatria"
-        }
-  }
-}
-"""
+class ConsultaReadSerializer(serializers.ModelSerializer):
+    medico = MedicoSerializer()
 
-
-class ConsultaSerializer(serializers.ModelSerializer):
     class Meta:
         model = Consulta
-        fields = "__all__"
+        fields = ["id", "dia", "horario", "data_agendamento", "medico"]
