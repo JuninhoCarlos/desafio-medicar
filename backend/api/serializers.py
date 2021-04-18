@@ -25,10 +25,10 @@ class AgendaSerializer(serializers.ModelSerializer):
 
     def get_horarios(self, obj):
         hora_atual = datetime.now()
-
+        # Se for um dia futuro, retorne todos os horarios
         if obj.dia > date.today():
             return obj.horarios.all().values_list("horario", flat=True)
-
+        # Se for o dia de hoje, remove os horários que já passaram
         return [obj.horarios.filter(horario__gte=hora_atual).values_list("horario", flat=True)]
 
     class Meta:
