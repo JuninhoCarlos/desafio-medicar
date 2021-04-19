@@ -95,13 +95,18 @@ class APITest(APITestCase):
         res = self.cliente_api.post(
             url_consultas, {"agenda_id": agenda_hoje.pk, "horario": futuro_1.time()}
         )
-        # self.assertEqual(res.status_code, status.HTTP_201_CREATED)
-        # self.pk_consulta = res[0]["id"]
-
+        self.assertEqual(res.status_code, status.HTTP_201_CREATED)
+        self.pk_consulta = res.data["id"]
+        self.consulta_passada = Consulta.objects.create(
+            horario="14:00",
+            medico=self.medico_joao,
+            dia=self.hoje - timedelta(days=1),
+            usuario=self.usuario_api,
+            agenda=self.agenda_ontem,
+        )
         self.cliente_api.post(
             url_consultas, {"agenda_id": agenda_hoje.pk, "horario": passado.time()}
         )
-
         self.cliente_api.post(
             url_consultas, {"agenda_id": self.agenda_amanha.pk, "horario": passado.time()}
         )
@@ -242,16 +247,6 @@ class APITest(APITestCase):
         self.assertEqual(resposta.status_code, status.HTTP_200_OK)
         self.assertEqual(len(resposta.data), 1)
 
-    def teste_get_consultas(self):
-        """
-        Testa se lista somente as consultas que não passaram o dia e o horario
-        """
-        url = reverse("consultas_post")
-        resposta = self.cliente_api.get(url)
-        print(resposta.data)
-        self.assertEqual(resposta.status_code, status.HTTP_200_OK)
-        self.assertEqual(len(resposta.data), 4)
-
     def teste_horario_excluido_agenda(self):
         """
         Teste se os horarios passados sao removidos da listagem da agenda
@@ -262,6 +257,15 @@ class APITest(APITestCase):
         resposta = self.cliente_api.get(url)
         self.assertEqual(resposta.status_code, status.HTTP_200_OK)
         self.assertEqual(len(resposta.data[0]["horarios"]), 2)
+
+    def teste_get_consultas(self):
+        """
+        Testa se lista somente as consultas que não passaram o dia e o horario
+        """
+        url = reverse("consultas_post")
+        resposta = self.cliente_api.get(url)
+        self.assertEqual(resposta.status_code, status.HTTP_200_OK)
+        self.assertEqual(len(resposta.data), 4)
 
     def teste_marcar_consulta(self):
         """
@@ -324,6 +328,32 @@ class APITest(APITestCase):
         """
         Testa o caso de sucesso da desmarcação de consulta
         """
-        # url = f'reverse("consultas_detalhes")/{self.pk_consulta}/'
-        # resposta = self.cliente_api.delete(url)
-        # self.assertEqual(resposta.status_code, status.HTTP_204_NO_CONTENT)
+        url = f'{reverse("consultas_post")}{self.pk_consulta}/'
+        resposta = self.cliente_api.delete(url)
+        self.assertEqual(resposta.status_code, status.HTTP_204_NO_CONTENT)
+
+    def teste_desmacar_consulta_inexistente(self):
+        """
+        Testa caso onde tenta desmarcar uma consulta que não existe
+        """
+        url = f'{reverse("consultas_post")}546846/'
+        resposta = self.cliente_api.delete(url)
+        self.assertEqual(resposta.status_code, status.HTTP_404_NOT_FOUND)
+
+    def teste_desmacar_consulta_do_outro(self):
+        """
+        Testa caso onde um usuario manda um delete para uma consulta
+        que existe, mas não pertence a ele
+        """
+        url = f'{reverse("consultas_post")}{self.pk_consulta}/'
+        resposta = self.cliente_teste.delete(url)
+        self.assertEqual(resposta.status_code, status.HTTP_404_NOT_FOUND)
+
+    def teste_desmarcar_consulta_passada(self):
+        """
+        Testa caso onde o usuario tenta desmarcar uma consulta
+        que ja aconteceu
+        """
+        url = f'{reverse("consultas_post")}{self.consulta_passada.pk}/'
+        resposta = self.cliente_teste.delete(url)
+        self.assertEqual(resposta.status_code, status.HTTP_404_NOT_FOUND)

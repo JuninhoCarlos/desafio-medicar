@@ -41,13 +41,15 @@ class AgendaAPIView(ListAPIView):
 
 
 class ConsultaAPIView(generics.ListCreateAPIView):
-    queryset = Consulta.objects.filter()
     write_serializer_class = ConsultaWriteSerializer
     read_serializer_class = ConsultaReadSerializer
     permission_classes = [IsAuthenticated]
 
     def get_queryset(self):
-        return Consulta.objects.filter(usuario=self.request.user)
+        return Consulta.objects.filter(
+            Q(usuario=self.request.user) & Q(dia__gte=date.today())
+            | (Q(dia=date.today()) & Q(horario__gte=datetime.now().time()))
+        )
 
 
 class ConsultaDeleteApiView(RetrieveDestroyAPIView):
