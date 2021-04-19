@@ -28,11 +28,6 @@ class AgendaFilter(filters.FilterSet):
         field_name="medico__especialidade", queryset=Especialidade.objects.all()
     )
     data = filters.DateFromToRangeFilter(field_name="dia", widget=MudaSufixoWidget)
-    # data_inicio = filters.DateFilter(
-    #    field_name="dia",
-    #    lookup_expr=("gte"),
-    # )
-    # data_fim = filters.DateFilter(field_name="dia", lookup_expr=("lte"))
 
     class Meta:
         model = Agenda
