@@ -53,16 +53,10 @@ class ConsultaAPIView(generics.ListCreateAPIView):
 class ConsultaDeleteApiView(RetrieveDestroyAPIView):
 
     serializer_class = ConsultaReadSerializer
-    # queryset = Consulta.objects.all()
     permission_classes = [IsAuthenticated]
 
     def get_queryset(self):
 
-        return (
-            Consulta.objects.all()
-            .filter(usuario=self.request.user)
-            .filter(
-                Q(dia__gt=date.today())
-                | (Q(dia=date.today()) & Q(horario__gte=datetime.now().time()))
-            )
+        return Consulta.objects.filter(usuario=self.request.user).filter(
+            Q(dia__gt=date.today()) | (Q(dia=date.today()) & Q(horario__gte=datetime.now().time()))
         )

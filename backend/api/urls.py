@@ -32,7 +32,7 @@ urlpatterns = [
     path("v1/consultas/<int:pk>/", ConsultaDeleteApiView.as_view()),
     path("v1/medicos/", MedicoAPIView.as_view()),
     path("v1/agendas/", AgendaAPIView.as_view()),
-    path("v1/especialidades/", EspecialidadeAPIView.as_view()),
+    path("v1/especialidades/", EspecialidadeAPIView.as_view(), name="get_especialidades"),
 ]
 
 urlpatterns = format_suffix_patterns(urlpatterns)
