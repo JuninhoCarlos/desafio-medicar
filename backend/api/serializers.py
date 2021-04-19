@@ -101,6 +101,7 @@ class ConsultaWriteSerializer(serializers.Serializer):
 
 class ConsultaReadSerializer(serializers.ModelSerializer):
     medico = MedicoSerializer()
+    horario = serializers.TimeField(format="%H:%M")
 
     class Meta:
         model = Consulta
