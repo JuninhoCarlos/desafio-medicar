@@ -13,7 +13,7 @@ class Especialidade(models.Model):
 
 class Medico(models.Model):
     nome = models.CharField(max_length=100)
-    crm = models.CharField(max_length=15)
+    crm = models.BigIntegerField()
     email = models.EmailField(blank=True)
     telefone = models.CharField(max_length=15, blank=True)
     especialidade = models.ForeignKey(Especialidade, on_delete=models.CASCADE)
