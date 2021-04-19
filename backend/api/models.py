@@ -51,3 +51,6 @@ class Consulta(models.Model):
     data_agendamento = models.DateTimeField(auto_now_add=True)
     horario = models.TimeField()
     agenda = models.ForeignKey(Agenda, on_delete=models.CASCADE)
+
+    class Meta:
+        ordering = ["dia", "horario"]
