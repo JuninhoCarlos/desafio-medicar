@@ -29,7 +29,7 @@ from api.views import (
 urlpatterns = [
     path("v1/auth/login", views.obtain_auth_token),
     path("v1/consultas/", ConsultaAPIView.as_view(), name="consultas_post"),
-    path("v1/consultas/<int:pk>/", ConsultaDeleteApiView.as_view()),
+    path("v1/consultas/<int:pk>/", ConsultaDeleteApiView.as_view(), name="consultas_detalhes"),
     path("v1/medicos/", MedicoAPIView.as_view(), name="get_medicos"),
     path("v1/agendas/", AgendaAPIView.as_view(), name="get_agendas"),
     path("v1/especialidades/", EspecialidadeAPIView.as_view(), name="get_especialidades"),
