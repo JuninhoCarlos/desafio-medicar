@@ -17,7 +17,7 @@ COPY requirements.txt /code/
 # Instala os pacotes python utilizado no projeto
 RUN pip install --upgrade pip
 RUN pip install -r requirements.txt
-COPY . /code/
+COPY ./backend/ /code/
 
 
 
