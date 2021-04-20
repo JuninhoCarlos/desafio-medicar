@@ -63,44 +63,46 @@ class APITest(APITestCase):
         # Cadastrar alguns horários
         agora = dt.now()
 
-        futuro_1 = agora + timedelta(minutes=10)
+        futuro_1 = agora + timedelta(minutes=5)
         hora_futuro1 = Horario.objects.create(horario=futuro_1.time())
 
-        futuro_2 = futuro_1 + timedelta(minutes=10)
-        hora_futuro2 = Horario.objects.create(horario=futuro_2.time())
+        futuro_2 = futuro_1 + timedelta(minutes=5)
+        self.hora_futuro2 = Horario.objects.create(horario=futuro_2.time())
 
         hora_generica = Horario.objects.create(horario="14:00")
 
-        passado = agora - timedelta(minutes=10)
+        passado = agora - timedelta(minutes=5)
         hora_passado = Horario.objects.create(horario=passado.time())
 
         # Cadastrar agendas
         # Agenda para hoje da Juliette
         self.hoje = dt.today()
-        agenda_hoje = Agenda(medico=self.medica_juliette, dia=self.hoje)
-        agenda_hoje.save()
+        self.agenda_hoje = Agenda(medico=self.medica_juliette, dia=self.hoje)
+        self.agenda_hoje.save()
         # Adiciona horarios validos à agenda
-        agenda_hoje.horarios.add(hora_futuro1, hora_futuro2)
+        self.agenda_hoje.horarios.add(hora_futuro1, self.hora_futuro2)
         # Adiciona horarios invalidos (Dia de hoje, mas que já passou)
-        agenda_hoje.horarios.add(hora_passado)
+        self.agenda_hoje.horarios.add(hora_passado)
 
         # Agenda para amanhã
         self.amanha = self.hoje + timedelta(days=1)
         self.agenda_amanha = Agenda(medico=self.medica_vihtube, dia=self.amanha)
         self.agenda_amanha.save()
         # Adiciona horários e todos são válido, pois a agenda é para amanhã
-        self.agenda_amanha.horarios.add(hora_futuro1, hora_futuro2, hora_passado, hora_generica)
+        self.agenda_amanha.horarios.add(
+            hora_futuro1, self.hora_futuro2, hora_passado, hora_generica
+        )
 
         # Agenda passada
         self.agenda_ontem = Agenda(medico=self.medico_joao, dia=self.hoje - timedelta(days=1))
         self.agenda_ontem.save()
-        self.agenda_ontem.horarios.add(hora_futuro1, hora_futuro2, hora_passado, hora_generica)
+        self.agenda_ontem.horarios.add(hora_futuro1, self.hora_futuro2, hora_passado, hora_generica)
 
         url_consultas = reverse("consultas_post")
 
         # Cadastra algumas consultas para hoje e amanhã
         res = self.cliente_api.post(
-            url_consultas, {"agenda_id": agenda_hoje.pk, "horario": futuro_1.time()}
+            url_consultas, {"agenda_id": self.agenda_hoje.pk, "horario": futuro_1.time()}
         )
         self.assertEqual(res.status_code, status.HTTP_201_CREATED)
         self.pk_consulta = res.data["id"]
@@ -266,6 +268,33 @@ class APITest(APITestCase):
 
         self.assertEqual(resposta.status_code, status.HTTP_200_OK)
         self.assertEqual(len(resposta.data[0]["horarios"]), 1)
+
+    def teste_agenda_excluida_quando_cheia(self):
+        """
+        Teste se a agenda desaparece da listagem quando tem todos os seus horarios
+        preenchidos, pois não há mais horários disponíveis
+        """
+        url = (
+            f'{reverse("get_agendas")}?data_inicio={self.hoje.date()}&data_final={self.hoje.date()}'
+        )
+        resposta = self.cliente_api.get(url)
+        self.assertEqual(resposta.status_code, status.HTTP_200_OK)
+        self.assertEqual(len(resposta.data[0]["horarios"]), 1)
+
+        # Agenda consulta no último horario disponivel nessa agenda
+        url = reverse("consultas_post")
+        resposta = self.cliente_api.post(
+            url, {"agenda_id": self.agenda_hoje.pk, "horario": self.hora_futuro2.horario}
+        )
+        self.assertEqual(resposta.status_code, status.HTTP_201_CREATED)
+
+        # Deve retornar um array vazio
+        url = (
+            f'{reverse("get_agendas")}?data_inicio={self.hoje.date()}&data_final={self.hoje.date()}'
+        )
+        resposta = self.cliente_api.get(url)
+        self.assertEqual(resposta.status_code, status.HTTP_200_OK)
+        self.assertEqual(len(resposta.data), 0)
 
     def teste_get_consultas(self):
         """
