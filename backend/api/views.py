@@ -36,8 +36,33 @@ class AgendaAPIView(ListAPIView):
     serializer_class = AgendaSerializer
     permission_classes = [IsAuthenticated]
     # Remove datas passadas da Listagem
-    queryset = Agenda.objects.filter(dia__gte=date.today()).distinct()
     filterset_class = AgendaFilter
+
+    def get_queryset(self):
+        queryset = Agenda.objects.filter(dia__gte=date.today())
+        agendas_invalidas = []
+
+        # Verifica se a agenda ainda está disponível
+        for agenda in queryset:
+            valida = False
+            for horario in agenda.horarios.all():
+                if agenda.dia == date.today() and horario.horario < datetime.now().time():
+                    continue
+                if (
+                    Consulta.objects.filter(agenda__dia=agenda.dia, horario=horario.horario).count()
+                    == 0
+                ):
+                    valida = True
+
+            if not valida:
+                agendas_invalidas.append(agenda.pk)
+
+        if len(agendas_invalidas) > 0:
+            for agenda in agendas_invalidas:
+                # remove as agenda que já tem todos os seus horarios ocupados da listagem
+                queryset = queryset.exclude(pk=agenda)
+
+        return queryset
 
 
 class ConsultaAPIView(generics.ListCreateAPIView):

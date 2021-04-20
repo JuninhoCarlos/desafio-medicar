@@ -11,6 +11,15 @@ from rest_framework.test import APIClient, APITestCase
 from .models import Agenda, Consulta, Especialidade, Horario, Medico
 
 
+def dump():
+
+    for agenda in Agenda.objects.all():
+        print("agenda:", agenda)
+        for horario in agenda.horarios.all():
+            print("horario:", horario.horario)
+        print()
+
+
 class APITest(APITestCase):
     def setUp(self):
         """
@@ -54,17 +63,15 @@ class APITest(APITestCase):
         # Cadastrar alguns horários
         agora = dt.now()
 
-        uma_hora = timedelta(hours=1)
-
-        futuro_1 = agora + uma_hora
+        futuro_1 = agora + timedelta(minutes=10)
         hora_futuro1 = Horario.objects.create(horario=futuro_1.time())
 
-        futuro_2 = futuro_1 + uma_hora
+        futuro_2 = futuro_1 + timedelta(minutes=10)
         hora_futuro2 = Horario.objects.create(horario=futuro_2.time())
 
         hora_generica = Horario.objects.create(horario="14:00")
 
-        passado = agora - uma_hora
+        passado = agora - timedelta(minutes=10)
         hora_passado = Horario.objects.create(horario=passado.time())
 
         # Cadastrar agendas
@@ -97,14 +104,13 @@ class APITest(APITestCase):
         )
         self.assertEqual(res.status_code, status.HTTP_201_CREATED)
         self.pk_consulta = res.data["id"]
+
         self.consulta_passada = Consulta.objects.create(
             horario="14:00",
             usuario=self.usuario_api,
             agenda=self.agenda_ontem,
         )
-        self.cliente_api.post(
-            url_consultas, {"agenda_id": agenda_hoje.pk, "horario": passado.time()}
-        )
+
         self.cliente_api.post(
             url_consultas, {"agenda_id": self.agenda_amanha.pk, "horario": passado.time()}
         )
@@ -202,6 +208,9 @@ class APITest(APITestCase):
         self.assertEqual(resposta.status_code, status.HTTP_200_OK)
         self.assertEqual(len(resposta.data), 2)
 
+    # Fazer teste de reservando um horario na agenda e desaparecendo aquela agenda da listagem
+    # Falta tratar caso onde so tem um horario marcado entre os varios possiveis, pois so eu removo toda a agenda
+    # quanto ela esta cheia
     def teste_filtro_medico_agenda(self):
         """
         Testa o filtro de medico aplicado no endpoint agenda
@@ -253,6 +262,7 @@ class APITest(APITestCase):
             f'{reverse("get_agendas")}?data_inicio={self.hoje.date()}&data_final={self.hoje.date()}'
         )
         resposta = self.cliente_api.get(url)
+
         self.assertEqual(resposta.status_code, status.HTTP_200_OK)
         self.assertEqual(len(resposta.data[0]["horarios"]), 2)
 
