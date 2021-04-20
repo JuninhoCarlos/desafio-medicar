@@ -1,4 +1,3 @@
-from datetime import date
 from datetime import datetime as dt
 from datetime import timedelta
 
@@ -70,6 +69,7 @@ class APITest(APITestCase):
         self.hora_futuro2 = Horario.objects.create(horario=futuro_2.time())
 
         hora_generica = Horario.objects.create(horario="14:00")
+        hora_generica_2 = Horario.objects.create(horario="15:00")
 
         passado = agora - timedelta(minutes=5)
         hora_passado = Horario.objects.create(horario=passado.time())
@@ -90,7 +90,7 @@ class APITest(APITestCase):
         self.agenda_amanha.save()
         # Adiciona horários e todos são válido, pois a agenda é para amanhã
         self.agenda_amanha.horarios.add(
-            hora_futuro1, self.hora_futuro2, hora_passado, hora_generica
+            hora_futuro1, self.hora_futuro2, hora_passado, hora_generica, hora_generica_2
         )
 
         # Agenda passada
@@ -180,7 +180,10 @@ class APITest(APITestCase):
         self.assertEqual(resposta.status_code, status.HTTP_200_OK)
         self.assertEqual(resposta.data[0]["nome"], "Joao")
 
-        url = f'{reverse("get_medicos")}?especialidade={self.ortopedista.pk}&especialidade={self.pediatra.pk}'
+        url = (
+            f'{reverse("get_medicos")}?especialidade={self.ortopedista.pk}'
+            f"&especialidade={self.pediatra.pk}"
+        )
         resposta = self.cliente_api.get(url)
         self.assertEqual(resposta.status_code, status.HTTP_200_OK)
         self.assertEqual(len(resposta.data), 3)
@@ -195,7 +198,10 @@ class APITest(APITestCase):
         self.assertEqual(resposta.status_code, status.HTTP_200_OK)
         self.assertEqual(resposta.data[0]["nome"], "Joao")
 
-        url = f'{reverse("get_medicos")}?search=J?especialidade={self.ortopedista.pk}&especialidade={self.pediatra.pk}'
+        url = (
+            f'{reverse("get_medicos")}?search=J?especialidade={self.ortopedista.pk}'
+            f"&especialidade={self.pediatra.pk}"
+        )
         resposta = self.cliente_api.get(url)
         self.assertEqual(resposta.status_code, status.HTTP_200_OK)
         self.assertEqual(len(resposta.data), 2)
@@ -210,9 +216,28 @@ class APITest(APITestCase):
         self.assertEqual(resposta.status_code, status.HTTP_200_OK)
         self.assertEqual(len(resposta.data), 2)
 
-    # Fazer teste de reservando um horario na agenda e desaparecendo aquela agenda da listagem
-    # Falta tratar caso onde so tem um horario marcado entre os varios possiveis, pois so eu removo toda a agenda
-    # quanto ela esta cheia
+    def teste_agenda_horario_excluido(self):
+        """
+        Testa se o horário é removido da listagem da agenda disponivel
+        quando se marcar uma consulta para ele
+        """
+        url = reverse("get_agendas")
+        resposta = self.cliente_api.get(url)
+        self.assertEqual(resposta.status_code, status.HTTP_200_OK)
+        self.assertEqual(len(resposta.data[1]["horarios"]), 2)
+
+        url = reverse("consultas_post")
+        resposta = self.cliente_api.post(
+            url, {"agenda_id": self.agenda_amanha.pk, "horario": "14:00"}
+        )
+        self.assertEqual(resposta.status_code, status.HTTP_201_CREATED)
+
+        # Depois da inserção deve ter só 1 horario disponivel agora
+        url = reverse("get_agendas")
+        resposta = self.cliente_api.get(url)
+        self.assertEqual(resposta.status_code, status.HTTP_200_OK)
+        self.assertEqual(len(resposta.data[1]["horarios"]), 1)
+
     def teste_filtro_medico_agenda(self):
         """
         Testa o filtro de medico aplicado no endpoint agenda
@@ -251,7 +276,12 @@ class APITest(APITestCase):
         """
         Testa a combinação dos filtros do endpoint agenda
         """
-        url = f'{reverse("get_agendas")}?medico={self.medica_juliette.pk}&especialidade={self.pediatra.pk}&data_inicio={self.hoje.date()}&data_final={self.hoje.date()}'
+        url = (
+            f'{reverse("get_agendas")}?medico={self.medica_juliette.pk}'
+            f"&especialidade={self.pediatra.pk}&data_inicio={self.hoje.date()}"
+            f"&data_final={self.hoje.date()}"
+        )
+        print(url)
         resposta = self.cliente_api.get(url)
         self.assertEqual(resposta.status_code, status.HTTP_200_OK)
         self.assertEqual(len(resposta.data), 1)
