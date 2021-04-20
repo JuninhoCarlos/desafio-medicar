@@ -64,7 +64,7 @@ class ConsultaWriteSerializer(serializers.Serializer):
             if (
                 len(
                     Consulta.objects.filter(
-                        usuario=usuario, dia=agenda.dia, horario=data["horario"]
+                        usuario=usuario, agenda__dia=agenda.dia, horario=data["horario"]
                     )
                 )
                 != 0
@@ -91,17 +91,20 @@ class ConsultaWriteSerializer(serializers.Serializer):
     def create(self, validated_data):
         horario = validated_data["horario"]
         agenda = Agenda.objects.get(pk=validated_data["agenda_id"])
-        medico = agenda.medico
-        dia = agenda.dia
         usuario = self.context["request"].user
-        return Consulta.objects.create(
-            dia=dia, horario=horario, usuario=usuario, medico=medico, agenda=agenda
-        )
+        return Consulta.objects.create(horario=horario, usuario=usuario, agenda=agenda)
 
 
 class ConsultaReadSerializer(serializers.ModelSerializer):
-    medico = MedicoSerializer()
     horario = serializers.TimeField(format="%H:%M")
+    dia = serializers.SerializerMethodField()
+    medico = serializers.SerializerMethodField()
+
+    def get_dia(self, obj):
+        return obj.agenda.dia
+
+    def get_medico(self, obj):
+        return MedicoSerializer(obj.agenda.medico).data
 
     class Meta:
         model = Consulta

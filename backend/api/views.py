@@ -47,8 +47,8 @@ class ConsultaAPIView(generics.ListCreateAPIView):
 
     def get_queryset(self):
         return Consulta.objects.filter(
-            Q(usuario=self.request.user) & Q(dia__gte=date.today())
-            | (Q(dia=date.today()) & Q(horario__gte=datetime.now().time()))
+            Q(usuario=self.request.user) & Q(agenda__dia__gte=date.today())
+            | (Q(agenda__dia=date.today()) & Q(horario__gte=datetime.now().time()))
         )
 
 
@@ -60,5 +60,6 @@ class ConsultaDeleteApiView(RetrieveDestroyAPIView):
     def get_queryset(self):
 
         return Consulta.objects.filter(usuario=self.request.user).filter(
-            Q(dia__gt=date.today()) | (Q(dia=date.today()) & Q(horario__gte=datetime.now().time()))
+            Q(agenda__dia__gt=date.today())
+            | (Q(agenda__dia=date.today()) & Q(horario__gte=datetime.now().time()))
         )

@@ -99,8 +99,6 @@ class APITest(APITestCase):
         self.pk_consulta = res.data["id"]
         self.consulta_passada = Consulta.objects.create(
             horario="14:00",
-            medico=self.medico_joao,
-            dia=self.hoje - timedelta(days=1),
             usuario=self.usuario_api,
             agenda=self.agenda_ontem,
         )
