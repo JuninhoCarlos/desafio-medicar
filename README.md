@@ -266,7 +266,7 @@ Marca uma consulta para o usuário logado
 ##### Requisição
 
 ```
-POST /consultas/
+POST /api/v1/consultas/
 {
   "agenda_id": 1,
   "horario": "14:15"
@@ -300,7 +300,7 @@ Desmarca uma consulta marcada pelo usuário
 ##### Requisição
 
 ```
-DELETE /consultas/<consulta_id>
+DELETE /api/v1/consultas/<consulta_id>
 ```
 
 ##### Retorno
@@ -314,7 +314,7 @@ Lista todas as agendas disponíveis na clínica
 #### Requisição
 
 ```
-GET /agendas/
+GET /api/v1/agendas/
 ```
 
 #### Retorno
@@ -359,5 +359,5 @@ GET /agendas/
 - Intervalo de data
 
 ```
-GET /agendas/?medico=1&especialidade=2&data_inicio=2020-01-01&data_final=2020-01-05
+GET /api/v1/agendas/?medico=1&especialidade=2&data_inicio=2020-01-01&data_final=2020-01-05
 ```
