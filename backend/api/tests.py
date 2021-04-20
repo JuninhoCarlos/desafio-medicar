@@ -256,7 +256,8 @@ class APITest(APITestCase):
 
     def teste_horario_excluido_agenda(self):
         """
-        Teste se os horarios passados sao removidos da listagem da agenda
+        Teste se os horarios passados sao removidos da listagem da agenda e se o
+        horario marcado esta sendo removido da listagem
         """
         url = (
             f'{reverse("get_agendas")}?data_inicio={self.hoje.date()}&data_final={self.hoje.date()}'
@@ -264,7 +265,7 @@ class APITest(APITestCase):
         resposta = self.cliente_api.get(url)
 
         self.assertEqual(resposta.status_code, status.HTTP_200_OK)
-        self.assertEqual(len(resposta.data[0]["horarios"]), 2)
+        self.assertEqual(len(resposta.data[0]["horarios"]), 1)
 
     def teste_get_consultas(self):
         """

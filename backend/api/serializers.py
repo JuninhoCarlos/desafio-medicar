@@ -23,19 +23,27 @@ class AgendaSerializer(serializers.ModelSerializer):
     medico = MedicoSerializer()
     horarios = serializers.SerializerMethodField()
 
+    def filtra_horarios_diponiveis(self, dia, horario_queryset):
+        horarios = []
+
+        for horario in horario_queryset:
+            if Consulta.objects.filter(agenda__dia=dia, horario=horario.horario).count() == 0:
+                horarios.append(horario.horario)
+        return horarios
+
     def get_horarios(self, obj):
         hora_atual = datetime.now()
         # Se for um dia futuro, retorne todos os horarios
         if obj.dia > date.today():
             return [
                 hora.strftime("%H:%M")
-                for hora in obj.horarios.all().values_list("horario", flat=True)
+                for hora in self.filtra_horarios_diponiveis(obj.dia, obj.horarios.all())
             ]
         # Se for o dia de hoje, remove os horários que já passaram
         return [
             hora.strftime("%H:%M")
-            for hora in obj.horarios.filter(horario__gte=hora_atual).values_list(
-                "horario", flat=True
+            for hora in self.filtra_horarios_diponiveis(
+                obj.dia, obj.horarios.filter(horario__gte=hora_atual)
             )
         ]
 
