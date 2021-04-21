@@ -131,7 +131,7 @@ Manda as credenciais e recebe o token como retorno
 ```
 POST /api/v1/auth/login/
 {
-  "user": admin,
+  "username": "admin",
   "password": "admin"
 }
 ```
