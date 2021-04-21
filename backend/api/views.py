@@ -47,10 +47,7 @@ class AgendaAPIView(ListAPIView):
             for horario in agenda.horarios.all():
                 if agenda.dia == date.today() and horario.horario < datetime.now().time():
                     continue
-                if (
-                    Consulta.objects.filter(agenda__dia=agenda.dia, horario=horario.horario).count()
-                    == 0
-                ):
+                if Consulta.objects.filter(agenda=agenda, horario=horario.horario).count() == 0:
                     valida = True
 
             if not valida:

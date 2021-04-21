@@ -115,13 +115,13 @@ desafio https://github.com/Intmed-Software/desafio/tree/master/backend.
 
 Os endpoints disponíveis e os métodos HTTP permitidos são:
 
-- /api/v1/auth/login/ (post)
-- /api/v1/especialidades/ (get)
-- /api/v1/medicos/ (get)
-- /api/v1/agendas/ (get)
-- /api/v1/consultas/ (get,post,delete)
+- /login/ (post)
+- /especialidades/ (get)
+- /medicos/ (get)
+- /agendas/ (get)
+- /consultas/ (get,post,delete)
 
-### O endpoint /api/v1/auth/login/
+### O endpoint /login/
 Autentica o usuário e retorna o token de acesso à API
 
 #### Requisição
@@ -129,7 +129,7 @@ Autentica o usuário e retorna o token de acesso à API
 Manda as credenciais e recebe o token como retorno
 
 ```
-POST /api/v1/auth/login/
+POST /auth/login/
 {
   "username": "admin",
   "password": "admin"
@@ -144,14 +144,14 @@ POST /api/v1/auth/login/
 ```
 
 
-### O endpoint /api/v1/especialidades/
+### O endpoint /especialidades/
 
 Lista todas as especialidades médicas disponíveis na clínica:
 
 #### Requisição
 
 ```
-GET /api/v1/especialidades/
+GET /especialidades/
 ```
 
 #### Resposta
@@ -182,17 +182,17 @@ GET /api/v1/especialidades/
 - Nome da especialidade (termo de pesquisa)
 
 ```
-GET /api/v1/especialidades/?search=ped
+GET /especialidades/?search=ped
 ```
 
-### O endpoint /api/v1/medicos/
+### O endpoint /medicos/
 
 Lista todos os médicos que atendem pela clínica
 
 #### Requisição
 
 ```
-GET /api/v1/medicos/
+GET /medicos/
 ```
 
 #### Resposta
@@ -235,10 +235,10 @@ GET /api/v1/medicos/
 - Nome do médico (termo de pesquisa)
 
 ```
-GET /api/v1/medicos/?search=maria&especialidade=1&especialidade=3
+GET /medicos/?search=maria&especialidade=1&especialidade=3
 ```
 
-### O endpoint /api/v1/consultas/
+### O endpoint /consultas/
 
 #### Listar consultas marcadas
 
@@ -247,7 +247,7 @@ Lista todas as consultas marcadas do usuário logado
 ##### Requisição
 
 ```
-GET /api/v1/consultas/
+GET /consultas/
 ```
 
 ##### Retorno
@@ -294,7 +294,7 @@ Marca uma consulta para o usuário logado
 ##### Requisição
 
 ```
-POST /api/v1/consultas/
+POST /consultas/
 {
   "agenda_id": 1,
   "horario": "14:15"
@@ -328,21 +328,21 @@ Desmarca uma consulta marcada pelo usuário
 ##### Requisição
 
 ```
-DELETE /api/v1/consultas/<consulta_id>
+DELETE /consultas/<consulta_id>
 ```
 
 ##### Retorno
 
 Não há retorno (vazio)
 
-### O endpoint /api/v1/agendas/
+### O endpoint /agendas/
 
 Lista todas as agendas disponíveis na clínica
 
 #### Requisição
 
 ```
-GET /api/v1/agendas/
+GET /agendas/
 ```
 
 #### Retorno
@@ -387,5 +387,5 @@ GET /api/v1/agendas/
 - Intervalo de data
 
 ```
-GET /api/v1/agendas/?medico=1&especialidade=2&data_inicio=2020-01-01&data_final=2020-01-05
+GET /agendas/?medico=1&especialidade=2&data_inicio=2020-01-01&data_final=2020-01-05
 ```
