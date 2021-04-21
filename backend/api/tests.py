@@ -25,7 +25,6 @@ class APITest(APITestCase):
         Configura o ambiente de teste
         """
 
-        # Cria dois usuários diferentes para o teste
         # usuario api
         self.usuario_api = get_user_model().objects.create_user(username="api", password="secret")
         token = Token.objects.create(user=self.usuario_api)
@@ -74,7 +73,7 @@ class APITest(APITestCase):
         passado = agora - timedelta(minutes=5)
         hora_passado = Horario.objects.create(horario=passado.time())
 
-        # Cadastrar agendas
+        # Cadastra agendas
         # Agenda para hoje da Juliette
         self.hoje = dt.today()
         self.agenda_hoje = Agenda(medico=self.medica_juliette, dia=self.hoje)
@@ -278,7 +277,6 @@ class APITest(APITestCase):
             f"&especialidade={self.pediatra.pk}&data_inicio={self.hoje.date()}"
             f"&data_final={self.hoje.date()}"
         )
-        print(url)
         resposta = self.cliente_api.get(url)
         self.assertEqual(resposta.status_code, status.HTTP_200_OK)
         self.assertEqual(len(resposta.data), 1)

@@ -35,7 +35,6 @@ class MedicoAPIView(ListAPIView):
 class AgendaAPIView(ListAPIView):
     serializer_class = AgendaSerializer
     permission_classes = [IsAuthenticated]
-    # Remove datas passadas da Listagem
     filterset_class = AgendaFilter
 
     def get_queryset(self):

@@ -6,7 +6,7 @@ from django_filters.widgets import RangeWidget, SuffixedMultiWidget
 from .models import Agenda, Especialidade, Medico
 
 
-class CustomField(fields.ModelMultipleChoiceField):
+class CampoMultiEscolha(fields.ModelMultipleChoiceField):
     def _check_values(self, value):
         """
         Sobrescreve a classe base para que seja possivel filtar por pk
@@ -48,12 +48,12 @@ class CustomField(fields.ModelMultipleChoiceField):
         return qs
 
 
-class CustomModelMultipleChoiceFilter(filters.ModelMultipleChoiceFilter):
+class FiltroMultiplaEscolha(filters.ModelMultipleChoiceFilter):
     """
     escreve um filtro customizado para o ModelMultipleChoiceFilter
     """
 
-    field_class = CustomField
+    field_class = CampoMultiEscolha
 
     def filter(self, qs, value):
         if len(value) > 0:
@@ -64,7 +64,7 @@ class CustomModelMultipleChoiceFilter(filters.ModelMultipleChoiceFilter):
 
 class MedicoFilter(filters.FilterSet):
     search = filters.CharFilter(field_name="nome", lookup_expr="istartswith")
-    especialidade = CustomModelMultipleChoiceFilter(
+    especialidade = FiltroMultiplaEscolha(
         field_name="especialidade", queryset=Especialidade.objects.all()
     )
 
@@ -81,8 +81,8 @@ class MudaSufixoWidget(RangeWidget, SuffixedMultiWidget):
 
 
 class AgendaFilter(filters.FilterSet):
-    medico = CustomModelMultipleChoiceFilter(field_name="medico", queryset=Medico.objects.all())
-    especialidade = CustomModelMultipleChoiceFilter(
+    medico = FiltroMultiplaEscolha(field_name="medico", queryset=Medico.objects.all())
+    especialidade = FiltroMultiplaEscolha(
         field_name="medico__especialidade", queryset=Especialidade.objects.all()
     )
     data = filters.DateFromToRangeFilter(field_name="dia", widget=MudaSufixoWidget)

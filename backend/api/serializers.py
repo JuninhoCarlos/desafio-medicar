@@ -8,7 +8,7 @@ from .models import Agenda, Consulta, Especialidade, Medico
 class EspecialidadeSerializer(serializers.ModelSerializer):
     class Meta:
         model = Especialidade
-        fields = "__all__"
+        fields = ["id", "nome"]
 
 
 class MedicoSerializer(serializers.ModelSerializer):
@@ -60,40 +60,38 @@ class ConsultaWriteSerializer(serializers.Serializer):
         "# Valida a inserção de uma Consulta"
         try:
             agenda = Agenda.objects.get(pk=data["agenda_id"])
-
-            "# Valida data e horario da consulta"
-            if agenda.dia < date.today():
-                raise serializers.ValidationError("Dia de consulta invalido!")
-            if agenda.dia == date.today() and data["horario"] < datetime.now().time():
-                raise serializers.ValidationError("Horario de consulta invalido!")
-
-            "# Verifica se o usuário já não possui uma consulta marcada para esse mesmo dia/hora"
-            usuario = self.context["request"].user
-            if (
-                len(
-                    Consulta.objects.filter(
-                        usuario=usuario, agenda__dia=agenda.dia, horario=data["horario"]
-                    )
-                )
-                != 0
-            ):
-                raise serializers.ValidationError(
-                    "usuario já possui uma consulta marcada nesse horario e dia!"
-                )
-
-            # Verifica se o horário existe na agenda
-            if (
-                len(Agenda.objects.filter(pk=data["agenda_id"], horarios__horario=data["horario"]))
-                == 0
-            ):
-                raise serializers.ValidationError("Horario inexistente na agenda!")
-
-            # Verifica se o horário não já está ocupado
-            if len(Consulta.objects.filter(agenda=data["agenda_id"], horario=data["horario"])) != 0:
-                raise serializers.ValidationError("Horário já está ocupado!")
-
         except Agenda.DoesNotExist as agenda_nao_existe:
             raise serializers.ValidationError("O id da agenda não existe!") from agenda_nao_existe
+
+        "# Valida data e horario da consulta"
+        if agenda.dia < date.today():
+            raise serializers.ValidationError("Dia de consulta invalido!")
+        if agenda.dia == date.today() and data["horario"] < datetime.now().time():
+            raise serializers.ValidationError("Horario de consulta invalido!")
+
+        "# Verifica se o usuário já não possui uma consulta marcada para esse mesmo dia/hora"
+        usuario = self.context["request"].user
+        if (
+            Consulta.objects.filter(
+                usuario=usuario, agenda__dia=agenda.dia, horario=data["horario"]
+            ).count()
+            != 0
+        ):
+            raise serializers.ValidationError(
+                "usuario já possui uma consulta marcada nesse horario e dia!"
+            )
+
+        # Verifica se o horário existe na agenda
+        if (
+            Agenda.objects.filter(pk=data["agenda_id"], horarios__horario=data["horario"]).count()
+            == 0
+        ):
+            raise serializers.ValidationError("Horario inexistente na agenda!")
+
+        # Verifica se o horário não já está ocupado
+        if Consulta.objects.filter(agenda=data["agenda_id"], horario=data["horario"]).count() != 0:
+            raise serializers.ValidationError("Horário já está ocupado!")
+
         return data
 
     def create(self, validated_data):
