@@ -191,20 +191,17 @@ class APITest(APITestCase):
     def teste_filtro_busca_medicos(self):
         """
         Testa a busca e o filtro juntos
-        (atualmente funciona como um or (search | especialidae))
         """
-        url = f'{reverse("get_medicos")}?search=jo?especialidade={self.ortopedista.pk}'
-        resposta = self.cliente_api.get(url)
-        self.assertEqual(resposta.status_code, status.HTTP_200_OK)
-        self.assertEqual(resposta.data[0]["nome"], "Joao")
-
-        url = (
-            f'{reverse("get_medicos")}?search=J?especialidade={self.ortopedista.pk}'
-            f"&especialidade={self.pediatra.pk}"
-        )
+        url = reverse("get_medicos") + "?search=j"
         resposta = self.cliente_api.get(url)
         self.assertEqual(resposta.status_code, status.HTTP_200_OK)
         self.assertEqual(len(resposta.data), 2)
+
+        # certifica que filtrou a juliete
+        url = f'{reverse("get_medicos")}?search=j&especialidade={self.ortopedista.pk}'
+        resposta = self.cliente_api.get(url)
+        self.assertEqual(resposta.status_code, status.HTTP_200_OK)
+        self.assertEqual(len(resposta.data), 1)
 
     def teste_get_agenda_disponiveis(self):
         """
