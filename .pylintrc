@@ -4,6 +4,7 @@ disable=abstract-method,
         arguments-differ,        
         missing-docstring,        
         pointless-string-statement,
+        useless-super-delegation
 load-plugins=pylint_django              
         
 
