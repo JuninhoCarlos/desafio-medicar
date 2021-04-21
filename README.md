@@ -11,7 +11,11 @@ Caso não tenha o Docker e o Docker-compose, instale. Instruções de instalaç�
 #### Passo 1
 
 Crie um arquivo .env no diretório raiz do repositório para armazenar as variáveis de ambiente que o settings.py lê. Para simplicar essa configuração, o arquivo env.sample
-já possui uma configuração válida para os containers docker que serão criados. Então, copie o conteúdo do env.sample para o arquivo .env.
+já possui uma configuração válida para os containers docker que serão criados. Então, copie o conteúdo do env.sample para o arquivo .env. Isso pode ser feito com o comando:
+
+```
+$ cat env.sample > .env
+```
 
 #### Passo 2
 
@@ -111,10 +115,34 @@ desafio https://github.com/Intmed-Software/desafio/tree/master/backend.
 
 Os endpoints disponíveis e os métodos HTTP permitidos são:
 
+- /api/v1/auth/login (post)
 - /api/v1/especialidades/ (get)
 - /api/v1/medicos/ (get)
 - /api/v1/agendas/ (get)
 - /api/v1/consultas/ (get,post,delete)
+
+### O endpoint /api/v1/auth/login/
+Autentica o usuário e retorna o token de acesso à API
+
+#### Requisição
+
+Manda as credenciais e recebe o token como retorno
+
+```
+POST /api/v1/consultas/
+{
+  "user": admin,
+  "password": "admin"
+}
+```
+
+#### Resposta
+```json
+  {
+    "token": "9944b09199c62bcf9418ad846dd0e4bbdfc6ee4b",    
+  }
+```
+
 
 ### O endpoint /api/v1/especialidades/
 
