@@ -115,7 +115,7 @@ desafio https://github.com/Intmed-Software/desafio/tree/master/backend.
 
 Os endpoints disponíveis e os métodos HTTP permitidos são:
 
-- /api/v1/auth/login (post)
+- /api/v1/auth/login/ (post)
 - /api/v1/especialidades/ (get)
 - /api/v1/medicos/ (get)
 - /api/v1/agendas/ (get)
@@ -129,7 +129,7 @@ Autentica o usuário e retorna o token de acesso à API
 Manda as credenciais e recebe o token como retorno
 
 ```
-POST /api/v1/consultas/
+POST /api/v1/auth/login/
 {
   "user": admin,
   "password": "admin"
