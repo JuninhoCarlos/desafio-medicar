@@ -1,6 +1,6 @@
 # desafio-medicar
 
-Um sistema intuito de auxiliar seus clientes na marcação de consultas e gerenciar seu corpo médico. Esse projeto foi desenvolvido como parte da avaliação do processo seletivo da IntMed-Software.
+Um sistema com o intuito de auxiliar seus clientes na marcação de consultas e gerenciar seu corpo médico. Esse projeto foi desenvolvido como parte da avaliação do processo seletivo da IntMed-Software.
 
 ## Configuração
 
@@ -10,20 +10,20 @@ Caso não tenha o Docker e o Docker-compose, instale. Instruções de instalaç�
 
 #### Passo 1
 
-Crie um arquivo .env no diretório raiz do repositório para armazenar as variáveis de ambiente que o settings.py lê. Para simplicar essa configuração, o arquivo env.sample
-já possui uma configuração válida para os containers docker que serão criados. Então, copie o conteúdo do env.sample para o arquivo .env. Isso pode ser feito com o comando:
-
-```
-$ cat env.sample > .env
-```
-
-#### Passo 2
-
 Depois de instalado o Docker, clone o repositorio no diretório de sua preferência e acesse o diretório
 
 ```
 $ git clone https://github.com/JuninhoCarlos/desafio-medicar.git
 $ cd desafio-medicar
+```
+
+#### Passo 2
+
+Crie um arquivo .env no diretório raiz do repositório para armazenar as variáveis de ambiente que o settings.py lê. Para simplicar essa configuração, o arquivo env.sample
+já possui uma configuração válida para os containers docker que serão criados. Então, copie o conteúdo do env.sample para o arquivo .env. Isso pode ser feito com o comando:
+
+```
+$ cat env.sample > .env
 ```
 
 #### Passo 3
