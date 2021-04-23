@@ -6,7 +6,8 @@ Um sistema com o intuito de auxiliar seus clientes na marcação de consultas e 
 
 ### Docker:
 
-Caso não tenha o Docker e o Docker-compose, instale. Instruções de instalação pode ser encontradas em https://www.docker.com/get-started .
+Caso não tenha o Docker e o Docker-compose, instale-os. Instruções de instalação podem ser encontradas em https://www.docker.com/get-started (Docker) e 
+https://docs.docker.com/compose/install/ (Docker-compose).
 
 #### Passo 1
 
@@ -129,7 +130,7 @@ Autentica o usuário e retorna o token de acesso à API
 Manda as credenciais e recebe o token como retorno
 
 ```
-POST /auth/login/
+POST /login/
 {
   "username": "admin",
   "password": "admin"
