@@ -13,6 +13,25 @@
     --gray2: #A8A8A8;
 }
 
+.container{
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    position: absolute;
+    top: 0px;
+    left: 0px;
+    padding: 0px;
+    margin: 0px;
+    height: 100vh;
+    width: 100vw;
+}
+
+.logo{
+    height: 50px;
+    margin: auto;
+}
+
 /* Flex-box classes */
 
 .d-flex{
@@ -52,9 +71,47 @@
 
 /* Buttons */
 
-.btn{
+.btn {    
     width: 180px;
     height: 40px;
+    
+    background-color: var(--white);
+    color: var(--primary);
+
+    font-weight: bold;
+    font-size: 18px;
+    line-height: 21px;
+    border: none;
     border-radius: 8px;
 }
 
+
+.bnt-primary{
+    color: var(--white);
+    background: var(--primary);
+    border-radius: 8px;
+}
+
+/* Inputs */
+
+.input-text{
+    width: 400px;
+    height: 40px;
+    padding-left: 8px;
+    font-style: normal;
+    font-weight: normal;
+    font-size: 13px;
+    line-height: 15px;
+
+    /* White */
+    background: var(--white);
+
+    /* Gray 2 */
+    border: 1px solid var(--gray2);
+    border-radius: 4px;
+}
+
+input:focus{
+    outline: none;
+    border: 1px solid var(--primary)
+}

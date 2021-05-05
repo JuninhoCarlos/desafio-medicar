@@ -1,21 +1,3 @@
-.login-container{
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
-    position: absolute;
-    top: 0px;
-    left: 0px;
-    padding: 0px;
-    margin: 0px;
-    height: 100vh;
-    width: 100vw;
-}
-
-.logo{
-    height: 50px;
-    margin: auto;
-}
 
 .input-text{
     width: 400px;
