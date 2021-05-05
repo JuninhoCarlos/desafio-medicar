@@ -1,1 +1,60 @@
 /* You can add global styles to this file, and also import other style files */
+* {
+    font-family: 'Roboto', sans-serif;  
+    box-sizing: border-box;
+}
+
+/* Colors */
+:root {
+    --white: #FFFFFF;
+    --primary: #49B4BB;
+    --secondary: #D9F1F3;
+    --gray1: #F8F8F8;
+    --gray2: #A8A8A8;
+}
+
+/* Flex-box classes */
+
+.d-flex{
+    display: flex;
+}
+
+.flex-col{
+    flex-direction: column;
+}
+
+.justify-content-center{
+    justify-content: center;
+}
+
+.justify-content-between{
+    justify-content: space-between;
+}
+
+.align-itens-center{
+    align-items: center;
+}
+
+/* Margins classes */
+.my-10{
+    margin-top: 10px;
+    margin-bottom: 10px;
+}   
+
+.mt-10{
+    margin: 10px 0px 0px 0px;
+
+}
+
+.mb-30{
+    margin-bottom: 30px;
+}
+
+/* Buttons */
+
+.btn{
+    width: 180px;
+    height: 40px;
+    border-radius: 8px;
+}
+
