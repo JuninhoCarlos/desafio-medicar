@@ -1,117 +1,128 @@
 /* You can add global styles to this file, and also import other style files */
 * {
-    font-family: 'Roboto', sans-serif;  
-    box-sizing: border-box;
+  font-family: "Roboto", sans-serif;
+  box-sizing: border-box;
 }
 
 /* Colors */
 :root {
-    --white: #FFFFFF;
-    --primary: #49B4BB;
-    --secondary: #D9F1F3;
-    --gray1: #F8F8F8;
-    --gray2: #A8A8A8;
+  --white: #ffffff;
+  --primary: #49b4bb;
+  --secondary: #d9f1f3;
+  --gray1: #f8f8f8;
+  --gray2: #a8a8a8;
 }
 
-.container{
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
-    position: absolute;
-    top: 0px;
-    left: 0px;
-    padding: 0px;
-    margin: 0px;
-    height: 100vh;
-    width: 100vw;
+.container {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  position: absolute;
+  top: 0px;
+  left: 0px;
+  padding: 0px;
+  margin: 0px;
+  height: 100vh;
+  width: 100vw;
 }
 
-.logo{
-    height: 50px;
-    margin: auto;
+.logo {
+  height: 50px;
+  margin: auto;
 }
 
 /* Flex-box classes */
 
-.d-flex{
-    display: flex;
+.d-flex {
+  display: flex;
 }
 
-.flex-col{
-    flex-direction: column;
+.flex-col {
+  flex-direction: column;
 }
 
-.justify-content-center{
-    justify-content: center;
+.justify-content-center {
+  justify-content: center;
 }
 
-.justify-content-between{
-    justify-content: space-between;
+.justify-content-between {
+  justify-content: space-between;
 }
 
-.align-itens-center{
-    align-items: center;
+.align-itens-center {
+  align-items: center;
 }
 
 /* Margins classes */
-.my-10{
-    margin-top: 10px;
-    margin-bottom: 10px;
-}   
-
-.mt-10{
-    margin: 10px 0px 0px 0px;
-
+.my-10 {
+  margin-top: 10px;
+  margin-bottom: 10px;
 }
 
-.mb-30{
-    margin-bottom: 30px;
+.mt-10 {
+  margin: 10px 0px 0px 0px;
+}
+
+.mb-10 {
+  margin: 0px 0px 10px 0px;
+}
+
+.mb-30 {
+  margin-bottom: 30px;
 }
 
 /* Buttons */
 
-.btn {    
-    width: 180px;
-    height: 40px;
-    
-    background-color: var(--white);
-    color: var(--primary);
+.btn {
+  width: 180px;
+  height: 40px;
 
-    font-weight: bold;
-    font-size: 18px;
-    line-height: 21px;
-    border: none;
-    border-radius: 8px;
+  background-color: var(--white);
+  color: var(--primary);
+
+  font-weight: bold;
+  font-size: 18px;
+  line-height: 21px;
+  border: none;
+  border-radius: 8px;
 }
 
-
-.bnt-primary{
-    color: var(--white);
-    background: var(--primary);
-    border-radius: 8px;
+.bnt-primary {
+  color: var(--white);
+  background: var(--primary);
+  border-radius: 8px;
 }
 
 /* Inputs */
 
-.input-text{
-    width: 400px;
-    height: 40px;
-    padding-left: 8px;
-    font-style: normal;
-    font-weight: normal;
-    font-size: 13px;
-    line-height: 15px;
+.input-text {
+  width: 400px;
+  height: 40px;
+  padding-left: 8px;
+  font-style: normal;
+  font-weight: normal;
+  font-size: 13px;
+  line-height: 15px;
 
-    /* White */
-    background: var(--white);
+  /* White */
+  background: var(--white);
 
-    /* Gray 2 */
-    border: 1px solid var(--gray2);
-    border-radius: 4px;
+  /* Gray 2 */
+  border: 1px solid var(--gray2);
+  border-radius: 4px;
 }
 
-input:focus{
-    outline: none;
-    border: 1px solid var(--primary)
+input:focus {
+  outline: none;
+  border: 1px solid var(--primary);
+}
+
+.bold {
+  font-weight: bold;
+}
+
+.text-alert {
+  color: #dc3545;
+  font-weight: 500;
 }

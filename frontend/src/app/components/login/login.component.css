@@ -1,25 +1,5 @@
 
-.input-text{
-    width: 400px;
-    height: 40px;
-    padding-left: 8px;
-    font-style: normal;
-    font-weight: normal;
-    font-size: 13px;
-    line-height: 15px;
 
-    /* White */
-    background: var(--white);
-
-    /* Gray 2 */
-    border: 1px solid var(--gray2);
-    border-radius: 4px;
-}
-
-input:focus{
-    outline: none;
-    border: 1px solid var(--primary)
-}
 
 input[type="checkbox"]{    
     -webkit-appearance: none;
