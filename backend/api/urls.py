@@ -24,9 +24,11 @@ from api.views import (
     ConsultaDeleteApiView,
     EspecialidadeAPIView,
     MedicoAPIView,
+    UsuarioView,
 )
 
 urlpatterns = [
+    path("users/", UsuarioView.as_view()),
     path("login/", views.obtain_auth_token),
     path("consultas/", ConsultaAPIView.as_view(), name="consultas_post"),
     path("consultas/<int:pk>/", ConsultaDeleteApiView.as_view(), name="consultas_detalhes"),

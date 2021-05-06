@@ -1,10 +1,11 @@
 from datetime import date, datetime
 
+from django.contrib.auth import get_user_model
 from django.db.models import Q
 from drf_rw_serializers import generics
 from rest_framework import filters
-from rest_framework.generics import ListAPIView, RetrieveDestroyAPIView
-from rest_framework.permissions import IsAuthenticated
+from rest_framework.generics import CreateAPIView, ListAPIView, RetrieveDestroyAPIView
+from rest_framework.permissions import AllowAny, IsAuthenticated
 
 from .filters import AgendaFilter, MedicoFilter
 from .models import Agenda, Consulta, Especialidade, Medico
@@ -14,7 +15,14 @@ from .serializers import (
     ConsultaWriteSerializer,
     EspecialidadeSerializer,
     MedicoSerializer,
+    UsuarioSerializer,
 )
+
+
+class UsuarioView(CreateAPIView):
+    serializer_class = UsuarioSerializer
+    permission_classes = [AllowAny]
+    queryset = get_user_model().objects.all()
 
 
 class EspecialidadeAPIView(ListAPIView):
