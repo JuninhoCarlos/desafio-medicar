@@ -5,6 +5,10 @@
     </div>
     <p>Crie sua conta</p>
     <form class="d-flex flex-col" [formGroup]="form" (ngSubmit)="onSubmit()">
+      <div class="mb-10 text-alert" *ngIf="form.hasError('request')">
+        Ocorreu Algum erro na sua requisição
+      </div>
+
       <div class="mb-10">
         <input
           type="text"
@@ -98,7 +102,9 @@
 
       <div class="d-flex justify-content-between my-10">
         <button class="btn bnt-secondary" [routerLink]="['']">Cancelar</button>
-        <button type="submit" class="btn bnt-primary">Confirmar</button>
+        <button type="submit" class="btn bnt-primary" [disabled]="!form.valid">
+          Confirmar
+        </button>
       </div>
     </form>
   </div>

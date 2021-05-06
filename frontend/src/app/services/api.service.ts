@@ -4,7 +4,7 @@ import { Observable, throwError } from 'rxjs';
 import { catchError, retry } from 'rxjs/operators';
 
 interface Usuario {
-  name: string;
+  username: string;
   email: string;
   password: string;
 }
@@ -12,7 +12,11 @@ interface Usuario {
   providedIn: 'root',
 })
 export class ApiService {
+  private baseUrl = ' http://localhost:8000/users';
+
   constructor(private http: HttpClient) {}
 
-  cadastraUsuario(usuario: Usuario): void {}
+  cadastraUsuario(usuario: Usuario): Observable<Usuario> {
+    return this.http.post<Usuario>(`${this.baseUrl}/users/`, usuario);
+  }
 }
