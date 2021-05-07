@@ -3,7 +3,7 @@ import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
 
 import { senhaValidator } from '../utils/validators';
-import { ApiService } from '../../services/api.service';
+import { ApiService } from '../../services/api';
 
 @Component({
   selector: 'app-registro-usuario',

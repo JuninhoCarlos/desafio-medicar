@@ -4,13 +4,26 @@
       <img src="assets/logo.png" class="logo" alt="logo" />
     </div>
 
-    <form class="d-flex flex-col">
+    <form class="d-flex flex-col" [formGroup]="form" (ngSubmit)="onSubmit()">
+      <div class="text-alert" *ngIf="form.hasError('autenticacao')">
+        Usuário ou senha incorreta
+      </div>
       <div class="input-group my-10">
-        <input type="text" class="input-text" placeholder="Email ou login" />
+        <input
+          type="text"
+          class="input-text"
+          placeholder="Email ou login"
+          formControlName="nome"
+        />
       </div>
 
       <div class="input-group mt-10">
-        <input type="password" class="input-text" placeholder="Senha" />
+        <input
+          type="password"
+          class="input-text"
+          placeholder="Senha"
+          formControlName="password"
+        />
       </div>
 
       <div class="checkbox-group">
@@ -21,7 +34,9 @@
         <button class="btn btn-secondary" [routerLink]="['/registro-usuario']">
           Criar Conta
         </button>
-        <button class="btn btn-primary">Acessar</button>
+        <button type="submit" class="btn btn-primary" [disabled]="!form.valid">
+          Acessar
+        </button>
       </div>
     </form>
   </div>

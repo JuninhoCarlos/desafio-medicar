@@ -5,13 +5,22 @@ import { HttpClientModule } from '@angular/common/http';
 
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
-import { LoginComponent } from './components/login/login.component';
-import { RegistroUsuarioComponent } from './components/registro-usuario/registro-usuario.component';
+import { LoginComponent } from './components/login';
+import { RegistroUsuarioComponent } from './components/registro-usuario';
 
-import { ApiService } from './services/api.service';
+import { ApiService } from './services/api';
+import { HomeComponent } from './components/home';
+import { LoggedInGuard } from './logged-in.guard';
+import { HeaderComponent } from './components/header/header.component';
 
 @NgModule({
-  declarations: [AppComponent, LoginComponent, RegistroUsuarioComponent],
+  declarations: [
+    AppComponent,
+    LoginComponent,
+    RegistroUsuarioComponent,
+    HomeComponent,
+    HeaderComponent,
+  ],
   imports: [
     BrowserModule,
     AppRoutingModule,
@@ -19,7 +28,7 @@ import { ApiService } from './services/api.service';
     ReactiveFormsModule,
     HttpClientModule,
   ],
-  providers: [ApiService],
+  providers: [ApiService, LoggedInGuard],
   bootstrap: [AppComponent],
 })
 export class AppModule {}
