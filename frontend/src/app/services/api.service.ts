@@ -12,7 +12,7 @@ interface Usuario {
   providedIn: 'root',
 })
 export class ApiService {
-  private baseUrl = ' http://localhost:8000/users';
+  private baseUrl = ' http://localhost:8000';
 
   constructor(private http: HttpClient) {}
 

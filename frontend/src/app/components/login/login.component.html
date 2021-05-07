@@ -1,26 +1,28 @@
 <div class="container">
-    <div class="d-flex flex-col">
-        <div class="mb-30">
-            <img src="assets/logo.png" class="logo" alt="logo">
-        </div>
-
-        <form class="d-flex flex-col">
-            <div class="input-group my-10">
-                <input type="text" class="input-text" placeholder="Email ou login"/>
-            </div>
-
-            <div class="input-group mt-10">
-                <input type="password" class="input-text" placeholder="Senha"/>
-            </div>        
-            
-            <div class="checkbox-group">            
-                <input type="checkbox" id="salvarSenha">
-                <label for="salvarSenha" >Lembrar minha senha </label>
-            </div>        
-            <div class="d-flex justify-content-between">
-                <button class="btn bnt-secondary" [routerLink]="['/registro-usuario']"> Criar Conta </button>
-                <button class="btn bnt-primary"> Acessar </button>
-            </div>
-        </form>
+  <div class="d-flex flex-col">
+    <div class="mb-30">
+      <img src="assets/logo.png" class="logo" alt="logo" />
     </div>
+
+    <form class="d-flex flex-col">
+      <div class="input-group my-10">
+        <input type="text" class="input-text" placeholder="Email ou login" />
+      </div>
+
+      <div class="input-group mt-10">
+        <input type="password" class="input-text" placeholder="Senha" />
+      </div>
+
+      <div class="checkbox-group">
+        <input type="checkbox" id="salvarSenha" />
+        <label for="salvarSenha">Lembrar minha senha </label>
+      </div>
+      <div class="d-flex justify-content-between">
+        <button class="btn btn-secondary" [routerLink]="['/registro-usuario']">
+          Criar Conta
+        </button>
+        <button class="btn btn-primary">Acessar</button>
+      </div>
+    </form>
+  </div>
 </div>

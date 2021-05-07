@@ -78,9 +78,6 @@
   width: 180px;
   height: 40px;
 
-  background-color: var(--white);
-  color: var(--primary);
-
   font-weight: bold;
   font-size: 18px;
   line-height: 21px;
@@ -88,10 +85,23 @@
   border-radius: 8px;
 }
 
-.bnt-primary {
+.btn-secondary {
+  background-color: var(--white);
+  color: var(--primary);
+}
+
+.btn-secondary:hover {
+  background-color: var(--secondary);
+}
+
+.btn-primary {
   color: var(--white);
   background: var(--primary);
   border-radius: 8px;
+}
+
+.btn-primary:disabled {
+  background: var(--secondary);
 }
 
 /* Inputs */
