@@ -1,0 +1,34 @@
+header {
+  display: flex;
+  justify-content: space-between;
+  width: 627px;
+  padding: 18px 0px;
+}
+
+.credenciais {
+  padding: 6px 0px;
+}
+
+.logo-header {
+  height: 25px;
+}
+.credenciais > span {
+  font-size: 13px;
+  font-weight: 400;
+}
+
+.username {
+  display: inline-block;
+  color: var(--gray2);
+}
+
+.desconectar {
+  display: inline-block;
+  margin: 0px 0px 0px 40px;
+  color: var(--primary);
+}
+
+.logo-header > img {
+  height: 25px;
+  width: auto;
+}
