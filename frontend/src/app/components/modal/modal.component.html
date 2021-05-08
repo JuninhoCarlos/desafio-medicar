@@ -1,0 +1,12 @@
+<div id="myModal" class="modal" *ngIf="display">
+  <!-- Modal content -->
+  <div class="modal-content">
+    <span class="close" (click)="onClose.emit()">&times;</span>
+
+    <ng-content select="div[role=header]" class="header-css-class"></ng-content>
+
+    <div class="body-css-class">
+      <ng-content select="form[role=body]"></ng-content>
+    </div>
+  </div>
+</div>

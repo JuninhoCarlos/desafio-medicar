@@ -1,0 +1,71 @@
+<app-modal [display]="showModal" (onClose)="onClose()">
+  <div role="header">Nova Consulta</div>
+  <form role="body">
+    <select name="especialidade" id="especialidade">
+      <option value="">Especialidade</option>
+      <option value="saab">Saab</option>
+      <option value="mercedes">Mercedes</option>
+      <option value="audi">Audi</option>
+    </select>
+
+    <select name="medico" id="medico">
+      <option value="">Médico</option>
+      <option value="saab">Saab</option>
+      <option value="mercedes">Mercedes</option>
+      <option value="audi">Audi</option></select
+    ><select name="data" id="data">
+      <option value="">Data</option>
+      <option value="saab">Saab</option>
+      <option value="mercedes">Mercedes</option>
+      <option value="audi">Audi</option>
+    </select>
+
+    <select name="hora" id="hora">
+      <option value="">Hora</option>
+      <option value="saab">Saab</option>
+      <option value="mercedes">Mercedes</option>
+      <option value="audi">Audi</option>
+    </select>
+
+    <div class="d-flex justify-content-between" role="footer">
+      <button class="btn-cancelar">Cancelar</button>
+      <button class="btn-confirmar">Confirmar</button>
+    </div>
+  </form>
+</app-modal>
+
+<div class="lista-container">
+  <!-- Cabeçalho da tabela -->
+  <div class="d-flex justify-content-between">
+    <div class="consulta-clinica">Consulta Clínica</div>
+    <div class="botao-cadastro">
+      <button class="btn btn-primary small" (click)="toggleShowModal()">
+        <span> + </span> Nova Consulta
+      </button>
+    </div>
+  </div>
+
+  <table>
+    <thead>
+      <th>Especialidade</th>
+      <th>Profissional</th>
+      <th>Data</th>
+      <th>Hora</th>
+      <th></th>
+    </thead>
+    <tr>
+      <td>Cardio</td>
+      <td>Dr. Drauzio Varela</td>
+      <td>01/01/2020</td>
+      <td>13:30</td>
+      <td class="desmarcar"><span> x </span>desmarcar</td>
+    </tr>
+    <tr>
+      <td>Cardio</td>
+      <td>Dr. Drauzio Varela</td>
+      <td>01/01/2020</td>
+      <td>13:30</td>
+      <td class="desmarcar"><span> x </span>desmarcar</td>
+    </tr>
+  </table>
+</div>

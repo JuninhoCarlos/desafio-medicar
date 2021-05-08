@@ -1,0 +1,57 @@
+.lista-container {
+  width: 627px;
+  height: 688px;
+  background: #ffffff;
+  box-shadow: 0px 1px 4px rgba(0, 0, 0, 0.25);
+  border-radius: 4px;
+}
+
+.consulta-clinica {
+  font-size: 18px;
+  font-weight: bold;
+  color: black;
+  margin: 18px 8px;
+}
+
+.botao-cadastro {
+  margin: 16px 8px;
+}
+.small {
+  font-size: 13px;
+  font-weight: normal;
+  width: 138px;
+  height: 24px;
+  border-radius: 4px;
+}
+
+table {
+  border-collapse: collapse;
+  width: 100%;
+  margin-left: 8px;
+}
+
+td,
+th {
+  text-align: left;
+  font-size: 13px;
+  padding: 8px;
+}
+
+tr:nth-child(odd) {
+  background-color: var(--gray1);
+}
+
+thead {
+  font-weight: bold;
+  font-size: 12px;
+  color: var(--gray2);
+  text-transform: uppercase;
+}
+
+.desmarcar {
+  color: var(--primary);
+}
+
+.desmarcar:hover {
+  cursor: pointer;
+}
