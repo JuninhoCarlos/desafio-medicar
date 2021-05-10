@@ -16,6 +16,50 @@
 .botao-cadastro {
   margin: 16px 8px;
 }
+
+.btn-confirmar {
+  width: 180px;
+  height: 40px;
+
+  /* Secondary - Hover */
+  background: var(--primary);
+  border-radius: 8px;
+  border: none;
+
+  font-family: Roboto;
+  font-style: normal;
+  font-weight: bold;
+  font-size: 18px;
+  line-height: 21px;
+  /* identical to box height */
+
+  color: #ffffff;
+}
+
+.btn-confirmar:disabled {
+  background-color: var(--secondary);
+}
+
+.btn-cancelar {
+  width: 180px;
+  height: 40px;
+
+  /* Secondary - Hover */
+  background: #ffffff;
+  border-radius: 8px;
+  border: none;
+
+  font-family: Roboto;
+  font-style: normal;
+  font-weight: bold;
+  font-size: 18px;
+  line-height: 21px;
+
+  /* identical to box height */
+
+  color: var(--primary);
+}
+
 .small {
   font-size: 13px;
   font-weight: normal;

@@ -1,35 +1,60 @@
 <app-modal [display]="showModal" (onClose)="onClose()">
   <div role="header">Nova Consulta</div>
-  <form role="body">
-    <select name="especialidade" id="especialidade">
-      <option value="">Especialidade</option>
-      <option value="saab">Saab</option>
-      <option value="mercedes">Mercedes</option>
-      <option value="audi">Audi</option>
+  <form role="body" [formGroup]="form" (ngSubmit)="onSubmit()">
+    <select
+      #especialidade
+      name="especialidade"
+      id="especialidade"
+      (change)="onEspecialidadeChange(especialidade.value)"
+      formControlName="especialidade"
+      required
+    >
+      <option value="null" disabled selected hidden>Especialidade</option>
+      <option
+        *ngFor="let especialidade of especialidades"
+        [value]="especialidade.id"
+      >
+        {{ especialidade.nome }}
+      </option>
     </select>
 
-    <select name="medico" id="medico">
-      <option value="">Médico</option>
-      <option value="saab">Saab</option>
-      <option value="mercedes">Mercedes</option>
-      <option value="audi">Audi</option></select
-    ><select name="data" id="data">
-      <option value="">Data</option>
-      <option value="saab">Saab</option>
-      <option value="mercedes">Mercedes</option>
-      <option value="audi">Audi</option>
+    <select
+      #medico
+      name="medico"
+      id="medico"
+      formControlName="medico"
+      (change)="onMedicoChange(medico.value)"
+    >
+      <option value="null" disabled selected hidden>Médico</option>
+      <option *ngFor="let medico of medicos" [value]="medico.id">
+        {{ medico.nome }}
+      </option>
+    </select>
+    <select
+      #data
+      name="data"
+      id="data"
+      formControlName="data"
+      (change)="onDataChange(data.value)"
+    >
+      <option value="null" disabled selected hidden>Data</option>
+      <option *ngFor="let data of datas" [value]="data">
+        {{ data | date: "dd/MM/yyyy" }}
+      </option>
     </select>
 
-    <select name="hora" id="hora">
-      <option value="">Hora</option>
-      <option value="saab">Saab</option>
-      <option value="mercedes">Mercedes</option>
-      <option value="audi">Audi</option>
+    <select name="hora" id="hora" formControlName="hora">
+      <option value="null" disabled selected hidden>Hora</option>
+      <option *ngFor="let horario of horarios" [value]="horario">
+        {{ horario }}
+      </option>
     </select>
 
     <div class="d-flex justify-content-between" role="footer">
-      <button class="btn-cancelar">Cancelar</button>
-      <button class="btn-confirmar">Confirmar</button>
+      <button class="btn-cancelar" (click)="toggleShowModal()">Cancelar</button>
+      <button type="submit" class="btn-confirmar" [disabled]="!form.valid">
+        Confirmar
+      </button>
     </div>
   </form>
 </app-modal>
@@ -53,19 +78,14 @@
       <th>Hora</th>
       <th></th>
     </thead>
-    <tr>
-      <td>Cardio</td>
-      <td>Dr. Drauzio Varela</td>
-      <td>01/01/2020</td>
-      <td>13:30</td>
-      <td class="desmarcar"><span> x </span>desmarcar</td>
-    </tr>
-    <tr>
-      <td>Cardio</td>
-      <td>Dr. Drauzio Varela</td>
-      <td>01/01/2020</td>
-      <td>13:30</td>
-      <td class="desmarcar"><span> x </span>desmarcar</td>
+    <tr *ngFor="let consulta of consultas">
+      <td>{{ consulta.medico.especialidade.nome }}</td>
+      <td>{{ consulta.medico.nome }}</td>
+      <td>{{ consulta.dia | date: "dd/MM/yyyy" }}</td>
+      <td>{{ consulta.horario }}</td>
+      <td class="desmarcar" (click)="desmarcarConsulta(consulta.id)">
+        <span> x </span>desmarcar
+      </td>
     </tr>
   </table>
 </div>
